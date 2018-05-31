@@ -8,6 +8,15 @@ class EntityState(object):
         # physical velocity
         self.p_vel = None
 
+        # color
+        self.color = None 
+
+        # is_relay
+        self.is_relay = False 
+
+        # relay_ut
+        self.relay_ut = None
+
 # state of agents (including communication and internal/mental state)
 class AgentState(EntityState):
     def __init__(self):
@@ -78,12 +87,14 @@ class Agent(Entity):
         # script behavior to execute
         self.action_callback = None
 
+
 # multi-agent world
 class World(object):
     def __init__(self):
         # list of agents and entities (can change at execution-time!)
         self.agents = []
         self.landmarks = []
+        self.og_agents = []
         # communication channel dimensionality
         self.dim_c = 0
         # position dimensionality
@@ -194,3 +205,12 @@ class World(object):
         force_a = +force if entity_a.movable else None
         force_b = -force if entity_b.movable else None
         return [force_a, force_b]
+    
+    def get_num_hos(self):
+        hos = 0
+        curr_agents = self.agents 
+        og_agents = self.og_agents 
+        for i in range(len(curr_agents)):
+            if curr_agents[i] != og_agents[i]:
+                hos+=1
+        return hos
